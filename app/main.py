@@ -9,9 +9,10 @@ from core.logger import logger
 from core.exception_handler import setup_exception_handlers
 from fastapi.exceptions import RequestValidationError
 
-from database.models.user import Users
+from app.database.models.user import User
 
 from modules.auth.controller import router as auth_router
+from modules.project.controller import router as project_router
 
 
 @asynccontextmanager
@@ -26,7 +27,7 @@ async def startup_event(app: FastAPI):
         logger.error(f"❌ Database connection failed: {e}")
 
 
-app = FastAPI(lifespan=startup_event)
+app = FastAPI(lifespan=startup_event, title="Animatic-Vision")
 
 origins = [
     "http://localhost:3000",
@@ -43,6 +44,8 @@ app.add_middleware(
 
 setup_exception_handlers(app)
 app.include_router(auth_router)
+app.include_router(project_router)
+
 
 @app.get("/test")
 def home():

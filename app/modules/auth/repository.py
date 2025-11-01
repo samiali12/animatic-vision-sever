@@ -1,7 +1,7 @@
 from core.logger import logger
 from core.exceptions import HTTPException
 from database.session import session
-from database.models.user import Users
+from app.database.models.user import User
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from core.exceptions import (
     UserAlreadyExistsError,
@@ -17,7 +17,7 @@ class AuthRepository:
 
     def create_user(self, fullName, email, password):
         try:
-            user = Users(fullName=fullName, email=email, password=password)
+            user = User(fullName=fullName, email=email, password=password)
             self.db.add(user)
             self.db.commit()
             self.db.refresh(user)
@@ -35,7 +35,7 @@ class AuthRepository:
 
     def login_user(self, email, password):
         try:
-            user = self.db.query(Users).filter(Users.email == email).first()
+            user = self.db.query(User).filter(User.email == email).first()
             if not user:
                 raise InvalidCredentialsError(message="Invalid email")
             flag = verify_password(user.password, password)
@@ -54,7 +54,7 @@ class AuthRepository:
 
     def me(self, email: str):
         try:
-            user = self.db.query(Users).filter(Users.email == email).first()
+            user = self.db.query(User).filter(User.email == email).first()
             return user
         except SQLAlchemyError as e:
             self.db.rollback()
@@ -63,7 +63,7 @@ class AuthRepository:
 
     def change_password(self, email: str, old_password: str, new_password: str):
         try:
-            user = self.db.query(Users).filter(Users.email == email).first()
+            user = self.db.query(User).filter(User.email == email).first()
 
             if not user:
                 raise HTTPException(status_code=404, detail="User not found")
@@ -84,7 +84,7 @@ class AuthRepository:
 
     def forget_password(self, email: str):
         try:
-            user = self.db.query(Users).filter(Users.email == email).first()
+            user = self.db.query(User).filter(User.email == email).first()
             if not user:
                 raise HTTPException(status_code=404, detail="User not found")
             return True
@@ -95,7 +95,7 @@ class AuthRepository:
 
     def reset_password(self, email: str, new_password: str):
         try:
-            user = self.db.query(Users).filter(Users.email == email).first()
+            user = self.db.query(User).filter(User.email == email).first()
             if not user:
                 raise HTTPException(status_code=404, detail="User not found")
 

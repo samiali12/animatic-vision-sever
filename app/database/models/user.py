@@ -1,5 +1,6 @@
 import enum
 from sqlalchemy import Column, Integer, String, DateTime, func, Enum
+from sqlalchemy.orm import relationship
 from database.session import base
 
 
@@ -7,7 +8,7 @@ class UserRole(enum.Enum):
     admin = "admin"
     user = "user"
 
-class Users(base):
+class User(base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     fullName = Column(String(100), nullable=False)
@@ -26,3 +27,6 @@ class Users(base):
 
     def __repr__(self):
         return f"<User(id={self.id}, email='{self.email}', role='{self.role}')>"
+
+    # Relationship 
+    projects = relationship("Project", back_populates="owner", cascade="all, delete-orphan")
