@@ -1,7 +1,7 @@
 from database.session import session
 from app.database.models.project import Project
 from sqlalchemy.exc import SQLAlchemyError
-from app.core.exceptions import DatabaseConnectionError, HTTPException
+from app.core.exceptions import DatabaseConnectionError
 
 
 class ProjectRepository:

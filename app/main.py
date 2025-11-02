@@ -9,18 +9,18 @@ from core.logger import logger
 from core.exception_handler import setup_exception_handlers
 from fastapi.exceptions import RequestValidationError
 
-from app.database.models.user import User
-
 from modules.auth.controller import router as auth_router
 from modules.project.controller import router as project_router
+from modules.scene.controller import router as scene_router
 
+from app.database.init_db import init_models
 
 @asynccontextmanager
 async def startup_event(app: FastAPI):
     try:
         with engine.connect() as conn:
             logger.info("✅ Database connected successfully!")
-
+        init_models()
         base.metadata.create_all(bind=engine)
         yield
     except Exception as e:
@@ -45,6 +45,7 @@ app.add_middleware(
 setup_exception_handlers(app)
 app.include_router(auth_router)
 app.include_router(project_router)
+app.include_router(scene_router)
 
 
 @app.get("/test")

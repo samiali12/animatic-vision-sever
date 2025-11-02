@@ -10,13 +10,7 @@ class SceneCreate(BaseModel):
 
 class SceneResponse(BaseModel):
     id: int
-    project_id: int
-    scene_index: int
     description: str
-    background_prompt: Optional[str]
-    background_path: Optional[str]
-    created_at: str
+    background_prompt: str | None
 
-    class Config:
-        from_attributes = True
-        json_encoders = {datetime: lambda v: v.isoformat()}
+    model_config = {"from_attributes": True}
