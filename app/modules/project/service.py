@@ -41,6 +41,17 @@ class ProjectService:
         except Exception as e:
             return ApiResponse.error(message=str(e), status_code=500)
 
+    def get_projects(self, user_id: int) -> ApiResponse:
+        try:
+            projects = self.repo.get_projects(user_id)
+            return ApiResponse(
+                message="Project retrieved successfully",
+                status_code=200,
+                data=[p.__dict__ for p in projects],
+            )
+        except Exception as e:
+            return ApiResponse.error(message=str(e), status_code=500)
+
     def get_project(self, project_id: int, user_id: int) -> ApiResponse:
         try:
             project: Project | None = self.repo.get_by_id(
@@ -50,10 +61,37 @@ class ProjectService:
                 return ApiResponse.error(
                     message="Project not found or access denied", status_code=404
                 )
+
+            project_format = {
+                "id": project.id,
+                "title": project.title,
+                "story_text": project.story_text,
+                "duration_sec": project.duration_sec,
+                "status": project.status,
+                "created_at": project.created_at.isoformat(),
+                "updated_at": project.updated_at.isoformat(),
+                "video_path": project.video_path,
+                "scenes": (
+                    [
+                        {
+                            "id": s.id,
+                            "description": s.description,
+                            "background_prompt": s.background_prompt,
+                            "background_path": s.background_path,
+                            "character_prompts": s.character_prompts or [],
+                            "character_paths": s.character_paths or [],
+                        }
+                        for s in project.scenes
+                    ]
+                    if project.scenes
+                    else []
+                ),
+            }
+
             return ApiResponse(
                 message="Project retrieved successfully",
                 status_code=200,
-                data=project.__dict__,
+                data=project_format,
             )
         except Exception as e:
             return ApiResponse.error(message=str(e), status_code=500)

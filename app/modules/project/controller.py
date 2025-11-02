@@ -24,7 +24,6 @@ def create_project(
         duration_sec=request.duration_sec or 20,
     )
 
-
 @router.get("/{project_id}")
 def get_project(
     project_id: int,
@@ -36,6 +35,15 @@ def get_project(
         raise HTTPException(status_code=result.status_code, detail=result.message)
     return result.data
 
+@router.get("/")
+def get_projects(
+    user: dict = Depends(is_authenticated),
+    service: ProjectService = Depends(get_project_service),
+):
+    result = service.get_projects(user_id=user["id"])
+    if result.status_code != 200:
+        raise HTTPException(status_code=result.status_code, detail=result.message)
+    return result.data
 
 @router.patch(
     "/{project_id}/status",

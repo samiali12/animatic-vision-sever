@@ -1,8 +1,8 @@
-"""initial
+"""initial tables
 
-Revision ID: 55bf502b04c4
-Revises: 
-Create Date: 2025-11-02 09:12:16.912399
+Revision ID: e56945ab06c9
+Revises: 3bb433103f54
+Create Date: 2025-11-02 21:47:55.290180
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '55bf502b04c4'
-down_revision: Union[str, Sequence[str], None] = None
+revision: str = 'e56945ab06c9'
+down_revision: Union[str, Sequence[str], None] = '3bb433103f54'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -39,7 +39,7 @@ def upgrade() -> None:
     sa.Column('title', sa.String(length=200), nullable=False),
     sa.Column('story_text', sa.Text(), nullable=False),
     sa.Column('duration_sec', sa.Integer(), nullable=True),
-    sa.Column('status', sa.Enum('draft', 'processing', 'completed', 'failed', name='projectstatus'), nullable=True),
+    sa.Column('status', sa.Enum('draft', 'segmented', 'completed', 'failed', name='projectstatus'), nullable=True),
     sa.Column('video_path', sa.String(length=500), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
@@ -65,6 +65,8 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=False),
     sa.Column('background_prompt', sa.Text(), nullable=True),
     sa.Column('background_path', sa.String(length=500), nullable=True),
+    sa.Column('character_prompts', sa.JSON(), nullable=True),
+    sa.Column('character_paths', sa.JSON(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['projects.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )

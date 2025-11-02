@@ -3,6 +3,9 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
+class SceneRequest(BaseModel):
+    projectId: int
+
 class SceneCreate(BaseModel):
     scene_index: int
     description: str

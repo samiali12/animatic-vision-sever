@@ -6,7 +6,7 @@ import enum
 
 class ProjectStatus(str, enum.Enum):
     draft = "draft"
-    processing = "processing"
+    segmented = "segmented"
     completed = "completed"
     failed = "failed"
 

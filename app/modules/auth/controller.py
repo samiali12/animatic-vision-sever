@@ -14,8 +14,10 @@ from core.response import ApiResponse
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
+
 def get_auth_service():
     return AuthService()
+
 
 @router.post("/register")
 async def register_user(
@@ -30,6 +32,7 @@ async def login_user(
 ):
     return service.login(request.email, request.password)
 
+
 @router.get("/refresh-token")
 async def refresh_token(
     user: dict = Depends(get_refresh_token),
@@ -39,7 +42,8 @@ async def refresh_token(
         user["id"], user["fullName"], user["email"], user["role"], user["token"]
     )
 
-@router.get("/logout")
+
+@router.post("/logout")
 async def logout(user: dict = Depends(is_authenticated)):
     exp = user.get("exp")
     token = user.get("token")
@@ -80,10 +84,10 @@ async def forgot_password(
     print(request)
     return service.forget_password(request.email)
 
+
 @router.post("/reset-password")
 async def reset_password(
     request: ResetPasswordRequest,
     service: AuthService = Depends(get_auth_service),
 ):
     return service.reset_password(request.token, request.newPassword)
-

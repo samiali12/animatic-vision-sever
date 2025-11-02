@@ -1,13 +1,8 @@
-import google.generativeai as genai
 from modules.project.repository import ProjectRepository
 from modules.scene.repository import SceneRepository
 from modules.story.processor import AnimeStyle, StoryProcessing
 from core.response import ApiResponse
 from modules.scene.schemas import SceneResponse
-
-genai.configure(api_key="YOUR_GEMINI_API_KEY")  # Set in .env
-model = genai.GenerativeModel("gemini-1.5-flash")
-
 
 class SceneService:
     def __init__(self):

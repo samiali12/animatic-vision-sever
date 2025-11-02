@@ -5,7 +5,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
 from database.session import base
 
-import database.models
+from database.models.user import User
+from database.models.project import Project
+from database.models.scene import Scene
+from database.models.asset import Asset
 
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config
