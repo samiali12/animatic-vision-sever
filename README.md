@@ -99,45 +99,6 @@ Server runs at `http://127.0.0.1:8000`.
   python -m app.celery_worker worker -Q emails --loglevel=info
   ```
 
-## 🔑 Authentication
-- Login sets `access_token` (1h) and `refresh_token` (7d) as HttpOnly cookies.
-- When `access_token` expires, call `GET /auth/refresh-token` to rotate tokens.
-- Logout blacklists the access token in Redis.
-
-## 🌍 CORS
-Allowed origins (see `app/main.py`):
-- `http://localhost:3000`
-- `http://127.0.0.1:3000`
-
-Add your client URL to `origins` if different.
-
-## 📡 API Summary
-
-Auth (`/auth`)
-- `POST /register` — Create user
-- `POST /login` — Sets cookies with JWTs
-- `GET /refresh-token` — Rotate tokens via refresh cookie
-- `POST /logout` — Blacklist current access token
-- `GET /me` — Get authenticated user
-- `PUT /change-password` — Change password
-- `POST /forgot-password` — Send reset email
-- `POST /reset-password` — Reset via token
-
-Projects (`/projects`)
-- `POST /` — Create project
-- `GET /` — List projects for user
-- `GET /{project_id}` — Get project (with scenes)
-- `PATCH /{project_id}/status` — Update status
-- `DELETE /{project_id}` — Delete
-
-Scenes (`/projects/segment`)
-- `POST /segment` — Trigger story segmentation for a project
-
-Health
-- `GET /test` — Simple health check
-
-> Protected routes require the `access_token` cookie. Clients must send requests with credentials included.
-
 ## 🧾 License
 This project is licensed under the MIT License. See `LICENSE` for details.
 
