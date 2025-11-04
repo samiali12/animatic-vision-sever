@@ -12,6 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from modules.auth.controller import router as auth_router
 from modules.project.controller import router as project_router
 from modules.scene.controller import router as scene_router
+from modules.admin.auth.controller import router as admin_auth_router
 
 from app.database.init_db import init_models
 
@@ -46,6 +47,7 @@ setup_exception_handlers(app)
 app.include_router(auth_router)
 app.include_router(project_router)
 app.include_router(scene_router)
+app.include_router(admin_auth_router)
 
 
 @app.get("/test")
